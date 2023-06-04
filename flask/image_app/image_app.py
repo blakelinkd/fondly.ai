@@ -8,11 +8,13 @@ import os
 import torch
 from PIL import Image
 from diffusers import StableDiffusionImg2ImgPipeline
+import requests
 
 
 app = Flask(__name__)
 
 def parse_arguments(request):
+    prompt = request.form.get('prompt')
     m1_guidance = float(request.form.get('m1_guidance', 0.0))
     m2_guidance = float(request.form.get('m2_guidance', 0.0))
     m1_inference_steps = int(request.form.get('m1_inference_steps', 100))
@@ -26,14 +28,14 @@ def parse_arguments(request):
     model_2 = request.form.get('model_2')
     image_prompt = request.form.get('image_prompt')
 
-    return m1_guidance, m2_guidance, m1_inference_steps, m2_inference_steps, strength, image_width, image_height, cuda_device, output_file, model_1, model_2, image_prompt
+    return prompt, m1_guidance, m2_guidance, m1_inference_steps, m2_inference_steps, strength, image_width, image_height, cuda_device, output_file, model_1, model_2, image_prompt
 
 @app.route("/generate-image", methods=["POST"])
 def generate_image():
     try:
         output_filename = f"{str(uuid.uuid4())}.jpg"
         output_path = os.path.join("imogen", output_filename)
-        m1_guidance, m2_guidance, m1_inference_steps, m2_inference_steps, strength, image_width, image_height, cuda_device, output_file, model_1, model_2, image_prompt = parse_arguments(request)
+        prompt, m1_guidance, m2_guidance, m1_inference_steps, m2_inference_steps, strength, image_width, image_height, cuda_device, output_file, model_1, model_2, image_prompt = parse_arguments(request)
         print(f'arguments: {parse_arguments(request)}')
         stage2_guidance = 12
         stage_2_inference_steps = 100
@@ -47,7 +49,6 @@ def generate_image():
         if not os.path.exists("imogen"):
             os.makedirs("imogen")
 
-        prompt = request.form.get('prompt')
         if image_prompt:
             with Image.open(image_prompt) as f:
                 init_image = f.convert("RGB")
