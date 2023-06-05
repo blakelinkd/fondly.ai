@@ -210,57 +210,71 @@
         })
           .done(function (data) {
             // If the API request was successful, display the status and image
-            if (data.status) {
-              // $('#submit-button').val(data.status)
-              $("#submit-button").val(data.status).css({
-                "opacity": "0.6"
-              }).prop("disabled", true).addClass("btn-secondary").removeClass("btn-primary")
-              // $('#status').text('Status: ' + data.status);
-            }
-            else {
-              $("#submit-button").val("waiting.").css({
-                "opacity": "0.6"
-              }).prop("disabled", true).addClass("btn-secondary").removeClass("btn-primary")
-              // $('#status').text('Status: waiting.')
-            }
-
-            // Check the status of the generated image every 2 seconds
-            var intervalId = setInterval(function () {
-              $.ajax({
-                url: '/check-status/' + data.job_id,
-                method: 'GET'
-              })
-                .done(function (statusData) {
-                  // If the status is "complete", display the generated image
-                  if (statusData.status.status === 'finished') {
-                    clearInterval(intervalId);
-                    // $("#submit-button").val("Generate Image")
-                    $("#submit-button").val("Generate Image").css({
+            console.log(data)
+            console.log('url: {{ app_host }}')
+            $("#submit-button").val("Generate Image").css({
                       "opacity": "1"
                     }).prop("disabled", false).removeClass("btn-secondary").addClass("btn-primary")
 
                     // $('#status').text('Status: ' + statusData.status.status);
-                    $('#image-container').html('<img class="img-fluid" src="' + statusData.status.meta.image_url + '" />');
-                  }
-                  // If the status is not "complete", update the status message
-                  else {
-                    $('#status')
-                      .text('Status: ' + JSON.stringify(statusData.status.status));
-                  }
-                })
-                .fail(function () {
-                  clearInterval(intervalId);
-                  $("#submit-button").val("Generate Image").css({
-                    "opacity": "1"
-                  }).prop("disabled", false).addClass("btn-primary").removeClass("btn-secondary")
-                  $('#status').text('Error: Failed to check status of generated image.');
-                });
-            }, 4000);
-          })
-          .fail(function () {
+                    $('#image-container').html('<img class="img-fluid" src="' + "{{ app_host }}/static/images/" + data['filename'] + '" />');
+
+          }).fail(function () {
             // If the API request failed, display an error message
             $('#status').text('Error: Failed to generate image.');
           });
+                    
+        //     if (data.status) {
+        //       // $('#submit-button').val(data.status)
+        //       $("#submit-button").val(data.status).css({
+        //         "opacity": "0.6"
+        //       }).prop("disabled", true).addClass("btn-secondary").removeClass("btn-primary")
+        //       // $('#status').text('Status: ' + data.status);
+        //     }
+        //     else {
+        //       $("#submit-button").val("waiting.").css({
+        //         "opacity": "0.6"
+        //       }).prop("disabled", true).addClass("btn-secondary").removeClass("btn-primary")
+        //       // $('#status').text('Status: waiting.')
+        //     }
+
+        //     // Check the status of the generated image every 2 seconds
+        //     var intervalId = setInterval(function () {
+        //       $.ajax({
+        //         url: '/check-status/' + data.job_id,
+        //         method: 'GET'
+        //       })
+        //         .done(function (statusData) {
+        //           // If the status is "complete", display the generated image
+        //           if (statusData.status.status === 'finished') {
+        //             clearInterval(intervalId);
+        //             // $("#submit-button").val("Generate Image")
+        //             $("#submit-button").val("Generate Image").css({
+        //               "opacity": "1"
+        //             }).prop("disabled", false).removeClass("btn-secondary").addClass("btn-primary")
+
+        //             // $('#status').text('Status: ' + statusData.status.status);
+        //             $('#image-container').html('<img class="img-fluid" src="' + statusData.status.meta.image_url + '" />');
+        //           }
+        //           // If the status is not "complete", update the status message
+        //           else {
+        //             $('#status')
+        //               .text('Status: ' + JSON.stringify(statusData.status.status));
+        //           }
+        //         })
+        //         .fail(function () {
+        //           clearInterval(intervalId);
+        //           $("#submit-button").val("Generate Image").css({
+        //             "opacity": "1"
+        //           }).prop("disabled", false).addClass("btn-primary").removeClass("btn-secondary")
+        //           $('#status').text('Error: Failed to check status of generated image.');
+        //         });
+        //     }, 4000);
+        //   })
+        //   .fail(function () {
+        //     // If the API request failed, display an error message
+        //     $('#status').text('Error: Failed to generate image.');
+        //   });
       });
     });
 
