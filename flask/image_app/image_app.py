@@ -157,7 +157,7 @@ def generate_image():
                     # return jsonify(payload)
                     return response.content, response.status_code
 
-        init_image = image
+            init_image = image
         with torch.cuda.device(device):
             pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
                 model_stage2_id,
@@ -185,6 +185,40 @@ def generate_image():
         ).images[0]
 
         image.save(output_path)
+
+        with open(output_path, "rb") as file:
+                    files = {"image": file}
+                    payload = {
+                        "files": files,
+                        "prompt": prompt,
+                        "m1_guidance": m1_guidance,
+                        "m2_guidance": m2_guidance,
+                        "m1_inference_steps": m1_inference_steps,
+                        "m2_inference_steps": m2_inference_steps,
+                        "strength": strength,
+                        "image_width": image_width,
+                        "image_height": image_height,
+                        "cuda_device": cuda_device,
+                        "output_file": output_file,
+                        "model_1": model_1,
+                        "model_2": model_2,
+                        "image_prompt": image_prompt,
+                    }
+                    print("trying to upload image to remote endpoint")
+                    target_url = os.getenv("APP_HOST")
+                    route = "/images"  # Specify the desired route
+                    target_url_with_route = target_url + route
+                    print(f"calling {target_url_with_route}")
+                    response = requests.post(target_url_with_route, data=payload, files=files)
+                    if response.status_code == 200:
+                        print("image uploaded successfully")
+                    else:
+                        print("image upload failed")
+                    # return jsonify(payload)
+                    return response.content, response.status_code
+
+
+
         # Make a POST request to the remote endpoint with the image file and other arguments
         remote_url = "https://fondly.ai/images"
         files = {"image": open(output_path, "rb")}
@@ -218,4 +252,4 @@ def generate_image():
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=False, host="0.0.0.0")

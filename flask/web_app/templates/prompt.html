@@ -185,6 +185,10 @@
     $(function () {
       $('#generate-image-form').submit(function (event) {
         event.preventDefault();
+        $('#submit-button').val(data.status)
+        $("#submit-button").val(data.status).css({
+        "opacity": "0.6"
+        }).prop("disabled", true).addClass("btn-secondary").removeClass("btn-primary")
         let formData = new FormData()
         formData.append("prompt", $('#prompt').val());
         formData.append("model_1", $('#model_1').val());
@@ -211,6 +215,9 @@
           .done(function (data) {
             // If the API request was successful, display the status and image
             console.log(data)
+            $("#submit-button").val("Generate Image").css({
+                      "opacity": "1"
+                    }).prop("disabled", false).removeClass("btn-secondary").addClass("btn-primary")
             console.log('url: {{ app_host }}')
             $("#submit-button").val("Generate Image").css({
                       "opacity": "1"
@@ -220,6 +227,9 @@
                     $('#image-container').html('<img class="img-fluid" src="' + "{{ app_host }}/static/images/" + data['filename'] + '" />');
 
           }).fail(function () {
+            $("#submit-button").val("Generate Image").css({
+                      "opacity": "1"
+                    }).prop("disabled", false).removeClass("btn-secondary").addClass("btn-primary")
             // If the API request failed, display an error message
             $('#status').text('Error: Failed to generate image.');
           });
