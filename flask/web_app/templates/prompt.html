@@ -184,6 +184,7 @@
     });
     $(function () {
       $('#generate-image-form').submit(function (event) {
+        
         event.preventDefault();
         
         let formData = new FormData()
@@ -201,6 +202,10 @@
           formData.append('image_prompt', droppedFile);
         }
         console.log(formData)
+        $("#submit-button").val("Working..").css({
+                      "opacity": "0.6"
+                    }).prop("disabled", false).removeClass("btn-primary").addClass("btn-secondary")
+        
         $.ajax({
           url: '/generate-image',
           method: 'POST',
