@@ -1,6 +1,7 @@
+from datetime import datetime, timedelta
 import json
 import random
-from flask import Flask, jsonify, render_template, request, send_file
+from flask import Flask, Response, jsonify, make_response, render_template, request, send_file
 import requests
 from dotenv import load_dotenv, set_key
 import os
@@ -56,6 +57,29 @@ def scroller(path):
 @app.route('/')
 def home():
     return render_template('index.html')
+
+@app.route('/robots.txt', methods=['GET'])
+def robots():
+    return send_file('templates/robots.txt')
+
+@app.route('/sitemap.xml', methods=['GET'])
+def sitemap():
+    """Generate sitemap.xml. Makes a list of urls and date modified."""
+    pages=[]
+    ten_days_ago=(datetime.now() - timedelta(days=10)).date().isoformat()
+    # static pages
+    for rule in app.url_map.iter_rules():
+        if "GET" in rule.methods and len(rule.arguments)==0:
+            pages.append(
+               [rule.rule,ten_days_ago]
+            )
+
+    sitemap_xml = render_template('sitemap_template.xml', pages=pages)
+    response= make_response(sitemap_xml)
+    response.headers["Content-Type"] = "application/xml"    
+    
+    return response
+
 
 
 @app.route("/images", methods=["POST"])
