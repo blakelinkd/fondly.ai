@@ -1,0 +1,138 @@
+body {
+    background-color: #fafafa;
+    color: #383830;
+    font-family: 'Source Code Pro', monospace;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    padding: 20px;
+    border-bottom: 1px solid #66d9ef;
+}
+
+header h1 {
+    color: #f92672;
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+header p {
+    color: #f92672;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+header h2 {
+    color: #fd971f;
+    font-size: 18px;
+}
+
+section {
+    padding: 20px;
+}
+
+section h3 {
+    color: #ae81ff;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+section p {
+    margin-bottom: 10px;
+}
+
+.job h4 {
+    color: #66d9ef;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.dates {
+    color: #a6e22e;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.content {
+    max-width: fit-content;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+a {
+    color: #ae81ff;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #fd971f;
+}
+
+a:hover {
+    color: #f92672;
+}
+
+.red {
+    color: #f92672;
+}
+
+a:active {
+    color: #ae81ff;
+}
+
+.tip {
+    color: #fd971f;
+}
+
+.qr-code {
+    width: 256px;
+    height: 256px;
+    display: flex;
+    margin: 0 auto;
+    margin-top: 40px;
+}
+
+.purple {
+    color: #ae81ff;
+}
+
+.link {
+    text-decoration: underline;
+}
+
+@media (max-width: 700px) {
+    .content {
+        margin: 0 0 !important;
+        max-width: 100vw;
+        padding: 0;
+    }
+    header, section {
+        padding: 10px;
+    }
+
+    header h1 {
+        font-size: 18px;
+    }
+
+    header p {
+        font-size: 12px;
+    }
+
+    header h2 {
+        font-size: 16px;
+    }
+
+    section h3 {
+        font-size: 18px;
+    }
+
+    .job h4 {
+        font-size: 16px;
+    }
+
+    .dates {
+        font-size: 14px;
+    }
+}

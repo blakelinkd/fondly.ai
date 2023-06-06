@@ -53,6 +53,10 @@ def scroller(path):
     print(f'returning random image: {random_image_name}')
     return render_template('scroller.html', random_image=random_image_name)
 
+@app.route('/')
+def home():
+    return render_template('index.html')
+
 
 @app.route("/images", methods=["POST"])
 def receive_image():
