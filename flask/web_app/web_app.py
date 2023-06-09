@@ -132,8 +132,10 @@ def receive_image():
         print(f"Image saved at: {file_path}")
 
         # Return a response indicating the successful receipt of the image
+        print(f'payload: {payload}')
         return jsonify(payload)
     except Exception as e:
+        print('error has occured', e)
         return jsonify({"error": str(e)}), 500
 
 
